@@ -66,8 +66,14 @@ TodoList.prototype.deleteItem = function (id) {
     }
 };
 
+// TodoList.prototype.recalculatePage = function(){
+
+// }
+
 TodoList.prototype.changeFilter = function (filter) {
     this.currentFilter = filter;
+    this.currentPage = 0;
+    // change page number
     this.saveToStore();
     this.render();
 };
@@ -79,5 +85,27 @@ TodoList.prototype.changePage = function (page) {
 };
 
 function renderConsole() {
+    var filter = this.currentFilter;
+    var page = this.currentPage;
+    var pageLimit = this.pageLimit;
+    var filteredItems = this.items.filter(function (item) {
+        switch (filter) {
+            case 'completed':
+                return item.status;
+                break;
+            case 'incompleted':
+                return !item.status;
+                break;
+            default:
+                return true;
+                break;
+        }
+    });
+
+    // var pages = [];
+    // for (var k = 0; k < Math.ceil(filteredItems.length / pageLimit); k++) {
+    //     pages.push(k + 1);
+    // }
+    // console.log(pages.join(' | '));
 
 }
