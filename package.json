@@ -1,0 +1,23 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "Demo todo app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EugenTepin/todo-app.git"
+  },
+  "author": "Eugene Tepin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EugenTepin/todo-app/issues"
+  },
+  "homepage": "https://github.com/EugenTepin/todo-app#readme",
+  "devDependencies": {
+    "live-server": "^1.2.1"
+  }
+}
