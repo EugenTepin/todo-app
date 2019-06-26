@@ -26,10 +26,10 @@
                 <div class="col-10">
                     <h1>TODO app</h1>
                     
-                    <div class="btn-group btn-group-toggle p-4" data-toggle="buttons">
+                    <div class="btn-group btn-group-toggle p-4" >
                         {{#each filters}}
                         <label class="btn btn-outline-primary {{#if status}}active{{/if}}">
-                            <input class="filter" type="radio" name="filter" id="{{text}}" autocomplete="off" {{#if status}}checked{{/if}} > {{text}}
+                            <input class="filter" type="radio" name="filter" value="{{text}}" autocomplete="off" {{#if status}}checked{{/if}} > {{text}}
                         </label>
                         {{/each}}
                     </div>
@@ -47,9 +47,9 @@
                         {{#each items}}
                         <div  id="{{id}}" class="row p-1 border-bottom">
                             <div class="col-2">
-                                <div class="btn-group-toggle" data-toggle="buttons">
+                                <div class="btn-group-toggle">
                                     <label class="btn btn-outline-secondary">
-                                        <input type="checkbox" checked autocomplete="off"> Undone
+                                        <input type="checkbox" {{#if status}}checked{{/if}} autocomplete="off"> Undone
                                     </label>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@
                     <div class="btn-toolbar p-4">
                         <div class="btn-group mr-2">
                             {{#each pages}}
-                            <button type="button" value="{{text}}" class="btn btn-outline-secondary {{#if status}}active{{/if}} ">{{text}}</button>
+                            <button type="button" value="{{text}}" class="page btn btn-outline-secondary {{#if status}}active{{/if}} ">{{text}}</button>
                             {{/each}}
                         </div>
                     </div>

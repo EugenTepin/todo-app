@@ -219,5 +219,21 @@ function createHandelbarsRender() {
             e.preventDefault();
             return false;
         })
+
+        $('.page').on('click', function (e) {
+            var $elem = $(this);
+            var pageNumber = $elem.val();
+            app.changePage(pageNumber);
+            e.preventDefault();
+            return false;
+        })
+
+        $('.filter').on('click', function (e) {
+            var $elem = $(this);
+            var filter = $elem.val();
+            app.changeFilter(filter);
+            e.preventDefault();
+            return false;
+        })
     }
 }
