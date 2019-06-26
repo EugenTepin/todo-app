@@ -13,7 +13,7 @@ function TodoList() {
     // this.currentFilter = filter || "all";
     this.items = [];
     this.pageLimit = 5;
-    this.currentPage = 1;
+    this.currentPage = 0;
     this.currentFilter = "all";
 }
 
@@ -53,38 +53,85 @@ TodoList.prototype.addItem = function (text) {
     this.saveToStore();
     this.render();
 };
+
+TodoList.prototype.changeItemStatus = function (id, status) {
+    this.items.some(function (item) {
+        var flag = item.id === id;
+        if (flag) {
+            item.status = status;
+        }
+        return flag
+    })
+    this.saveToStore();
+    this.render();
+};
+
 TodoList.prototype.deleteItem = function (id) {
     var index;
     var deleteFlag = this.items.some(function (item, i) {
         index = i;
-        return item.id === id;
+        return item.id === Number(id);
     });
     if (deleteFlag) {
         this.items.splice(index, 1);
+        var pages = this.getPages();
+        if (pages.indexOf(this.currentPage) === -1) {
+            this.currentPage = pages.pop();
+        }
         this.saveToStore();
         this.render();
     }
 };
 
-// TodoList.prototype.recalculatePage = function(){
-
-// }
+TodoList.prototype.getFilteredItems = function () {
+    var that = this;
+    return that.items.filter(function (item) {
+        switch (that.currentFilter) {
+            case 'completed':
+                return item.status;
+                break;
+            case 'incompleted':
+                return !item.status;
+                break;
+            case 'all':
+                return true;
+                break;
+            default:
+                return false;
+                break;
+        }
+    });
+};
 
 TodoList.prototype.changeFilter = function (filter) {
     this.currentFilter = filter;
     this.currentPage = 0;
-    // change page number
     this.saveToStore();
     this.render();
 };
+TodoList.prototype.getPages = function () {
+    var pages = [];
+    var filteredItems = this.getFilteredItems();
+    for (var k = 0; k < Math.ceil(filteredItems.length / this.pageLimit); k++) {
+        pages.push(k);
+    }
+    return pages;
+}
 
 TodoList.prototype.changePage = function (page) {
-    this.currentPage = page;
-    this.saveToStore();
-    this.render();
+    page = Number(page);
+    if (!isNaN(page)) {
+        var pages = this.getPages();
+        if (pages.indexOf(page) > -1) {
+            this.currentPage = page;
+        }
+        this.saveToStore();
+        this.render();
+    }
 };
 
-function renderConsole() {
+function consoleRender() {
+    console.clear();
     var filter = this.currentFilter;
     var page = this.currentPage;
     var pageLimit = this.pageLimit;
@@ -96,16 +143,81 @@ function renderConsole() {
             case 'incompleted':
                 return !item.status;
                 break;
-            default:
+            case 'all':
                 return true;
+                break;
+            default:
+                return false;
                 break;
         }
     });
 
-    // var pages = [];
-    // for (var k = 0; k < Math.ceil(filteredItems.length / pageLimit); k++) {
-    //     pages.push(k + 1);
-    // }
-    // console.log(pages.join(' | '));
+    var startIndex = page * pageLimit;
+    if (filteredItems.length === 0) {
+        console.log('You have 0 todo items, try to app.addItem("your text") to create one.')
+    }
+    var result = filteredItems.slice(startIndex, startIndex + pageLimit);
+    result.forEach(function (item, i) {
+        var tmp = ['#' + i, 'id ' + item.id, 'text: ' + item.text, 'status: ' + ((item.status) ? '[x]' : '[]')];
+        console.log(tmp.join(' | '));
+    });
 
+
+    var pages = [];
+    for (var k = 0; k < Math.ceil(filteredItems.length / pageLimit); k++) {
+        var pageNumStr = (k === this.currentPage) ? '[' + k + ']' : k;
+        pages.push(pageNumStr);
+    }
+    if (pages.length > 0) {
+        console.log('Pages: ' + pages.join(' | '));
+    }
+
+}
+
+
+function createHandelbarsRender() {
+    var tpl = $('#tpl').html();
+    var template = Handlebars.compile(tpl);
+
+    return function () {
+        // var data = {
+        //     items: [{}, {}],
+        //     currentFilter: '',
+        //     currentPage: 0,
+        //     pages: [1, 2]
+        // }
+
+        var currentPage = this.currentPage;
+        var currentFilter = this.currentFilter;
+        var startIndex = currentPage * this.pageLimit;
+        var data = {};
+        data.filters = ['all', 'completed', 'incompleted'].map(function (elem) {
+            return { text: elem, status: (elem === currentFilter) }
+        });
+        data.items = this.getFilteredItems().slice(startIndex, startIndex + this.pageLimit);
+        data.currentFilter = this.currentFilter;
+        data.currentPage = currentPage;
+        data.pages = this.getPages().map(function (elem) {
+            return { text: elem, status: (elem === currentPage) }
+        });
+
+        var rendered = template(data);
+        $('#app').empty().html(rendered);
+
+        $('#add').on('click', function (e) {
+            var textInput = $('#text');
+            app.addItem(textInput.val());
+            textInput.val('');
+            e.preventDefault();
+            return false;
+        });
+
+        $('.delete').on('click', function (e) {
+            var $elem = $(this);
+            var id = $elem.parents('.row').attr('id');
+            app.deleteItem(id);
+            e.preventDefault();
+            return false;
+        })
+    }
 }
