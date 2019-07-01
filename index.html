@@ -29,66 +29,13 @@
             min-height: 40%;
         }
     </style>
+    <script src="abstract.js"></script>
+    <script src="components.js"></script>
     <script src="app.js"></script>
+
 </head>
 
 <body>
-    <!-- Wrong  -->
-    <!-- <script id="tpl" type="text/html">
-        <div class="row justify-content-center">
-                <div class="col-10">
-                    <h1>TODO app</h1>
-                    
-                    <div class="btn-group btn-group-toggle p-4" >
-                        {{#each filters}}
-                        <label class="btn btn-outline-primary {{#if status}}active{{/if}}">
-                            <input class="filter" type="radio" name="filter" value="{{text}}" autocomplete="off" {{#if status}}checked{{/if}} > {{text}}
-                        </label>
-                        {{/each}}
-                    </div>
-
-                    <form class="p-4" action="#">
-                        <div class="input-group mb-3">
-                            <input id="text" type="text" class="form-control" placeholder="Todo item text">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button" id="add">Add</button>
-                            </div>
-                        </div>
-                    </form>
-    
-                    <form action="#" class="p-4">
-                        {{#each items}}
-                        <div  id="{{id}}" class="row p-1 border-bottom">
-                            <div class="col-2">
-                                <div class="btn-group-toggle">
-                                    <label class="btn {{#if status}}btn-success{{/if}}{{#unless status}}btn-outline-secondary{{/unless}}">
-                                        <input class="status" type="checkbox" {{#if status}}checked{{/if}} autocomplete="off"> {{#if status}}Done{{/if}}{{#unless status}}Undone{{/unless}}
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="col-7">
-                                <p>{{text}}</p>
-                            </div>
-                            <div class="col-3 text-right">
-                                <button class="delete btn btn-outline-danger" type="button">Delete</button>
-                            </div>
-                        </div>
-                        {{/each}}
-                    </form>
-                    <div class="btn-toolbar p-4">
-                        <div class="btn-group mr-2">
-                            {{#each pages}}
-                            <button type="button" value="{{text}}" class="page btn btn-outline-secondary {{#if status}}active{{/if}} ">{{text}}</button>
-                            {{/each}}
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-    </script> -->
-
-    <canvas id="q" class="hidden"></canvas>
-
     <div id="app" class="container">
         <div class="row justify-content-center">
             <div class="col-10">
@@ -116,29 +63,16 @@
         </div>
     </div>
 
-    <!-- <div id="easter-egg" class="easter-egg animated rollIn"></div> -->
-
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"
-        crossorigin="anonymous"></script> -->
 
     <script>
 
 
         window.onload = function (e) {
-            //
-            window.app = new TodoList();
-            //app.init(sessionStorage, consoleRender);
-            app.init(sessionStorage, renderRightWay);
-            setTimeout(matrixHasYou, 60000);
+            //window.app = new TodoList([], [filterByStatus], window.sessionStorage, 5, 0, 'all', consoleRender);
+            var app = new TodoList([], [filterByStatus], window.sessionStorage, 5, 0, 'all', renderRightWay);
+            app.init();
+
+            console.log(app);
         }    
     </script>
 </body>
